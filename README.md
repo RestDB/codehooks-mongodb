@@ -90,6 +90,7 @@ Your app is now listening on `http://localhost:3000/dev/myroute` and you can GET
 > Tip: Read the docs for the open source [Crudlify](https://www.npmjs.com/package/codehooks-crudlify-yup) package which creates a full CRUD REST API for your serverless node.js app.
 
 ## Documentation
+* [Complete example code](./examples/index.js)
 * [Database API](https://codehooks.io/docs/nosql-database-api)
 * [App events](https://codehooks.io/docs/appeventapi)
 * [Queue workers](https://codehooks.io/docs/queuehooks)
