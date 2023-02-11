@@ -78,6 +78,6 @@ Start your app with `npm start` and you should see.
 Running standalone
 ```
 
-Your app is now listening on `http://localhost:3000/dev/myroute`.
+Your app is now listening on `http://localhost:3000/dev/myroute` and you can GET, PUT, POST, PATCH and DELETE on any collection route, e.g. `/dev/mycollection`.
 
 > Tip: The (Crudlify)[https://www.npmjs.com/package/codehooks-crudlify-yup] package creates a full CRUD REST API for your app.
