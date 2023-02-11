@@ -1,0 +1,25 @@
+{
+  "name": "codehooks-mongodb",
+  "version": "1.0.0",
+  "description": "MongoDB implementation of a Codehooks datastore",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "debug": "^4.3.4",
+    "mongodb": "^5.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RestDB/codehooks-mongodb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RestDB/codehooks-mongodb/issues"
+  },
+  "homepage": "https://github.com/RestDB/codehooks-mongodb#readme"
+}
