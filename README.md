@@ -1,13 +1,15 @@
 # codehooks-mongodb
-A standard codehooks.io app can also run as a standalone [express.js](https://expressjs.com) app.
-This repository is an open source implementation of a [codehooks.io](https://codehooks.io) MongoDB datastore. A great option to avoid service lock-in or if you just want to run and manage it yourself.
+A standard [codehooks.io](https://codehooks.io) app can also run as a standalone [express.js](https://expressjs.com) app.
+This is a great option to avoid service lock-in or if you just want to run and manage it yourself. This repository is an open source implementation of a [codehooks.io](https://codehooks.io) [MongoDB](https://mongodb.com) datastore. 
 
 ## Usage
 
 Consider the standard Codehooks serverless app in the `index.js` file below.
 
 ```js
-// index.js - minimal codehooks.io serverless app
+/* index.js
+*  A minimal codehooks.io serverless app
+*/
 import {app, datastore} from 'codehooks-js';
 import crudlify from 'codehooks-crudlify-yup';
 
@@ -18,32 +20,35 @@ app.all('/myroute', (req, res) => {
 crudlify(app);
 
 export default app.init();
-
-// add code snippet below to run as a standard express app
 ```
-The above app can be deployed to the cloud serverless runtime with the `coho deploy` command.
+The codehooks app above can be deployed to the cloud serverless runtime with the `coho deploy` command.
 
-However, that same app can also run as a standalone express app by adding the following code snippet to your `index.js` file.
+However, the same app can also run as a standalone node.js express app. The trick is to add a separate JavaScript startup file, e.g. `standalone.js`. An example startup file is shown below, adapt it to your needs, express settings, MongoDB connection string, etc.
 
 ```js
-...
-// Part 2: for running it as a standalone express app
+/* 
+* standalone.js
+* Example express app for running codehooks apps local
+*/
+import coho from './index.js';
 import mongoStore from 'codehooks-mongodb';
 import express from 'express';
 import bodyParser from 'body-parser';
-const expressapp = express();
+const app = express();
+import Debug from "debug";
+const debug = Debug("codehooks-standalone");
 
-expressapp.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.json({ limit: '10mb' }));
 
 const options = {
     "datastore": new mongoStore(process.env.MONGODB_URI || 'mongodb://localhost:27017')
 }
-// apply codehooks routes as express route
-app.useExpress(expressapp, options);
 
-// start express
-expressapp.listen(3000, () => {
-    console.log("Running standalone")
+// important, make codehooks use express and MongoDB
+coho.app.useExpress(app, options);
+
+app.listen(3000, () => {
+    console.log("Running standalone on port 3000")
 })
 ```
 Create a `package.json` file for your app. 
@@ -51,12 +56,12 @@ Create a `package.json` file for your app.
 ```bash
 npm install codehooks-js codehooks-crudlify-yup express body-parser mongodb --save
 ```
-This should create something like the following example. To enable JavaScript ES6 you need to set `"type": "module"` manually.
+This should create something like the following example. To enable JavaScript ES6 you need to set `"type":"module"` manually.
 ```json
 {
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node standalone.js"
   },
   "dependencies": {
     "body-parser": "^1.20.1",
@@ -68,7 +73,7 @@ This should create something like the following example. To enable JavaScript ES
 }
 ```
 
-Alternatively you can copy the package.json above and install the dependencies with `npm install`.
+Alternatively you can copy the `package.json` above and install the dependencies with `npm install`.
 
 If you don't have a MongoDB instance already, you you can start a local MongoDB as a docker container.
 
@@ -80,9 +85,9 @@ Finally, start your serverless node.js app locally with the `npm start` command.
 
 ```bash
 > start
-> node index.js
+> node standalone.js
 
-Running standalone
+Running standalone on port 3000
 ```
 
 Your app is now listening on `http://localhost:3000/dev/myroute` and you can GET, PUT, POST, PATCH and DELETE on any collection route, e.g. `/dev/mycollection`.
@@ -90,7 +95,7 @@ Your app is now listening on `http://localhost:3000/dev/myroute` and you can GET
 > Tip: Read the docs for the open source [Crudlify](https://www.npmjs.com/package/codehooks-crudlify-yup) package which creates a full CRUD REST API for your serverless node.js app.
 
 ## Documentation
-* [Complete example code](./examples/index.js)
+* [Example code](./examples)
 * [Database API](https://codehooks.io/docs/nosql-database-api)
 * [App events](https://codehooks.io/docs/appeventapi)
 * [Queue workers](https://codehooks.io/docs/queuehooks)
