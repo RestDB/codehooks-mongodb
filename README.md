@@ -36,8 +36,10 @@ expressapp.use(bodyParser.json({ limit: '10mb' }));
 const options = {
     "datastore": new mongoStore(process.env.MONGODB_URI || 'mongodb://localhost:27017')
 }
-
+// apply codehooks routes as express route
 app.useExpress(expressapp, options);
+
+// start express
 expressapp.listen(3000, () => {
     console.log("Running standalone")
 })
