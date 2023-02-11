@@ -1,11 +1,10 @@
 # codehooks-mongodb
-An open source MongoDB implementation of a [codehooks.io](https://codehooks.io) datastore. Great option to avoid service lock-in or if you just want to run and manage it yourself.
+A standard codehooks.io app can also run as a standalone [express.js](https://expressjs.com) app.
+This repository is an open source implementation of a [codehooks.io](https://codehooks.io) MongoDB datastore. A great option to avoid service lock-in or if you just want to run and manage it yourself.
 
 ## Usage
 
-A standard codehooks.io app can also run as a standalone [express.js](https://expressjs.com) app.
-
-Consider the standard Codehooks serverless app below in the `index.js` file.
+Consider the standard Codehooks serverless app in the `index.js` file below.
 
 ```js
 // index.js - minimal codehooks.io serverless app
