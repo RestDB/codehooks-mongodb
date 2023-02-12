@@ -337,12 +337,12 @@ export default class mongoStore {
     }
 
     // key value set
-    set = (key, value, options = {}) => {
+    set = (key, val, options = {}) => {
         return new Promise(async (resolve, reject) => {
             try {
                 const collection = this.#db.collection('syskeyvaldata');
                 const keyspace = options.keyspace || 'default_keyspace';
-                const result = await collection.updateOne({key, keyspace}, {$set: {key, value}}, { upsert: true });
+                const result = await collection.updateOne({key, keyspace}, {$set: {key, val}}, { upsert: true });
                 debug("set result", result)
                 resolve(result);
             } catch (error) {
@@ -362,7 +362,7 @@ export default class mongoStore {
                     debug(key+' is not found')
                     return resolve(null)
                 }
-                resolve(result);
+                resolve(result[0].val);
             } catch (error) {
                 console.error(error)
                 reject(error.message);
@@ -417,7 +417,7 @@ export default class mongoStore {
                 num = parseInt(num);
                 const collection = this.#db.collection('syskeyvaldata');
                 const keyspace = options.keyspace || 'default_keyspace';
-                const result = await collection.updateOne({key, keyspace}, {$inc: {value: num}}, { upsert: true });
+                const result = await collection.updateOne({key, keyspace}, {$inc: {val: num}}, { upsert: true });
                 debug("incr result", result)
                 resolve(await this.get(key, options));
             } catch (error) {
