@@ -54,21 +54,24 @@ app.listen(3000, () => {
 Create a `package.json` file for your app. 
 
 ```bash
-npm install codehooks-js codehooks-crudlify-yup express body-parser mongodb --save
+npm install codehooks-mongodb codehooks-js codehooks-crudlify-yup express body-parser mongodb debug --save
 ```
-This should create something like the following example. To enable JavaScript ES6 you need to set `"type":"module"` manually.
+This should create something like the following example. To enable JavaScript ES6 you need to set `"type":"module"` manually. Also add a scripts.start command to start the express server.
+
 ```json
 {
   "type": "module",
   "scripts": {
     "start": "node standalone.js"
   },
-  "dependencies": {
+   "dependencies": {
     "body-parser": "^1.20.1",
-    "codehooks-crudlify-yup": "^1.0.2",
-    "codehooks-js": "^1.0.1",
+    "codehooks-crudlify-yup": "^1.0.3",
+    "codehooks-js": "^1.0.2",
+    "codehooks-mongodb": "^1.0.1",
+    "debug": "^4.3.4",
     "express": "^4.18.2",
-    "mongodb": "^5.0.0"
+    "mongodb": "^5.0.1"
   }
 }
 ```
