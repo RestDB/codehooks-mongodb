@@ -1,6 +1,6 @@
 {
   "name": "codehooks-mongodb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "MongoDB implementation of a Codehooks datastore",
   "type": "module",
   "main": "index.js",
