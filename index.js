@@ -161,6 +161,8 @@ export default class mongoStore {
             });
         });
     }
+    // alias
+    getArray = this.findAsArray;
 
     // insert new
     insertOne = (collname, data) => {
