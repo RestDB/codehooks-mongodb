@@ -1,6 +1,7 @@
 # codehooks-mongodb
-This repository is an open source implementation of a [codehooks.io](https://codehooks.io) backend app with a [MongoDB](https://mongodb.com) datastore. 
-This package enables a standard serverless [codehooks.io](https://codehooks.io) app to run as a standalone [express.js](https://expressjs.com) app.
+This repository is an open source implementation of a [codehooks.io](https://codehooks.io) backend with a [MongoDB](https://mongodb.com) database for persistence. 
+This package enables a standard serverless [codehooks.io](https://codehooks.io) backend to run as a standalone [express.js](https://expressjs.com) instance.
+
 This is a great option to avoid service lock-in or if you just want to run and manage it yourself. 
 
 ## Usage
@@ -9,9 +10,9 @@ Consider the standard Codehooks serverless CRUD app in the `index.js` file below
 
 ```js
 /* index.js
-*  A minimal codehooks.io serverless app
+*  A minimal codehooks.io backend app
 */
-import {app, datastore} from 'codehooks-js';
+import { app } from 'codehooks-js';
 import crudlify from 'codehooks-crudlify-yup';
 
 app.all('/myroute', (req, res) => {
@@ -22,14 +23,14 @@ crudlify(app);
 
 export default app.init();
 ```
-The codehooks app above can be deployed to the cloud serverless runtime with the `coho deploy` command.
+The codehooks backend above can be deployed to the cloud serverless runtime with the `coho deploy` command.
 
 However, the same app can also run as a standalone node.js express app. The trick is to add a separate JavaScript startup file, e.g. `standalone.js`. An example startup file is shown below, adapt it to your needs, express settings, MongoDB connection string, etc.
 
 ```js
 /* 
 * standalone.js
-* Example express app for running codehooks apps local
+* Example express app for running codehooks.io standalone using MongoDB
 */
 import coho from './index.js';
 import mongoStore from 'codehooks-mongodb';
