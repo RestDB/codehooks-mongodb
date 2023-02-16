@@ -38,6 +38,7 @@ export default class mongoStore {
     constructor(connstr) {
         debug("Connstr", connstr);
         this.#connstr = connstr || 'mongodb://localhost:27017';
+        return this;
     }
     // connect to mongodb
     connect = async () => {
@@ -56,7 +57,11 @@ export default class mongoStore {
             debug(error.message)
         }
         this.#listenQueue();
-        return;
+        return this;
+    }
+
+    open = () => {
+        return new Promise(resolve => resolve(this))
     }
 
 
