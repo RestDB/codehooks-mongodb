@@ -56,6 +56,11 @@ export default class mongoStore {
         } catch (error) {
             debug(error.message)
         }
+        try {
+            const result = await this.#db.collection('syskeyvaldata').createIndex({ key: 1, keyspace: 1 });
+        } catch (error) {
+            debug(error.message)
+        }
         this.#listenQueue();
         return this;
     }
@@ -153,7 +158,7 @@ export default class mongoStore {
             const arr = new Array();
 
             const instream = this.getMany(collname, options);
-            debug("finsAsArray", collname, options)
+            debug("findAsArray", collname, options)
             instream.on('data', (rec) => {
                 debug("data", rec)
                 arr.push(rec);
@@ -351,7 +356,7 @@ export default class mongoStore {
                 const keyspace = options.keyspace || 'default_keyspace';
                 const result = await collection.updateOne({key, keyspace}, {$set: {key, val}}, { upsert: true });
                 debug("set result", result)
-                resolve(result);
+                resolve(val);
             } catch (error) {
                 console.error(error)
                 reject(error.message);
@@ -393,15 +398,25 @@ export default class mongoStore {
 
     // key value get all by prefix
     getAll = (key, options={}) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const keyspace = options.keyspace || 'default_keyspace';
-                throw Error('Not implemented yet')
-            } catch (error) {
-                console.error(error)
-                reject(error.message);
-            }
+        const e = new emitter();
+        
+        const arr = new Array();
+        const keyspace = options.keyspace || 'default_keyspace';
+        options.filter = {"key": new RegExp(`^${key}`), "keyspace": keyspace}
+        const instream = this.getMany('syskeyvaldata', options);
+        debug("getall", options)
+        instream.on('data', (rec) => {
+            debug("data", rec)
+            e.emit('data', rec);
         });
+        instream.on('error', (e) => {
+            e.emit('error', e);
+        });
+        instream.on('end', () => {
+            e.emit('end');
+        });
+        // return stream emitter
+        return e;
     }
 
     // key value del all by prefix
