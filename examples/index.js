@@ -5,7 +5,7 @@ app.all('/myroute', (req, res) => {
     res.end('All of me')
 })
 
-// Add CRUD routes for collections (customer and product) with yup schema
+// Add CRUD routes for any collection
 crudlify(app);
 
 

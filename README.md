@@ -1,8 +1,9 @@
 # codehooks-mongodb
+
 This repository is an open source implementation of a [codehooks.io](https://codehooks.io) backend with a [MongoDB](https://mongodb.com) database for persistence. 
 This package enables a standard serverless [codehooks.io](https://codehooks.io) backend to run as a standalone [express.js](https://expressjs.com) instance.
 
-This is a great option to avoid service lock-in or if you just want to run and manage it yourself. 
+**codehooks-mongodb** is a great option to avoid service lock-in or if you just want to run and manage it yourself. 
 
 ## Usage
 
@@ -18,7 +19,7 @@ import crudlify from 'codehooks-crudlify-yup';
 app.all('/myroute', (req, res) => {
     res.end('Hit me again with any method!')
 })
-// Add CRUD routes for any collections
+// Add CRUD routes for any collection
 crudlify(app);
 
 export default app.init();
