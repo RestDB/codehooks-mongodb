@@ -9,22 +9,43 @@ const debug = Debug("codehooks-mongodb");
 
 // Stream data emitter
 class dataEmitter extends emitter {
-    response = null;
+    #response = null;
+    #arrData = null;
+    #arrDataResolver = null;
+
     constructor() {
         super();
     }
     pipe = (res) => {
-        this.response = res;
+        this.#response = res;
         res.set('Content-Type', 'application/json');
         res.write('[\n');
         return this;
     }
     json = (res) => {
-        this.response = res;
+        this.#response = res;
         return this.pipe(res);
     }
     getPipe = () => {
-        return this.response;
+        return this.#response;
+    }
+    toArray = () => {
+        this.#arrData = new Array();        
+        return new Promise((resolve, reject) => {
+            this.#arrDataResolver = resolve;
+        })
+    }
+    emit = (event, data) => {
+        if (this.#arrData !== null) {
+            debug("emit", event, data)
+            if (event === 'data') {
+                this.#arrData.push(data);
+            }
+            if (event === 'end') {
+                this.#arrDataResolver(this.#arrData);
+            }
+        }
+        super.emit(event, data)
     }
 }
 
@@ -64,11 +85,25 @@ export default class mongoStore {
         this.#listenQueue();
         return this;
     }
-
+    // virtual open to Singlethon
     open = () => {
         return new Promise(resolve => resolve(this))
     }
 
+    getCollection = (collname) => {
+        const wrap = {
+            getOne: (...params) => this.getOne(collname, ...params),
+            getMany: (...params) => this.getMany(collname, ...params),
+            insertOne: (...params) => this.insertOne(collname, ...params),
+            updateOne: (...params) => this.updateOne(collname, ...params),
+            updateMany: (...params) => this.updateMany(collname, ...params),
+            replaceOne: (...params) => this.replaceOne(collname, ...params),
+            replaceMany: (...params) => this.replaceMany(collname, ...params),
+            removeOne: (...params) => this.removeOne(collname, ...params),
+            removeMany: (...params) => this.removeMany(collname, ...params)
+        }        
+        return wrap;
+    }
 
     getOne = (collname, ID) => {
         return new Promise(async (resolve, reject) => {
@@ -298,19 +333,25 @@ export default class mongoStore {
                 cursorStream = cursor.stream()
             cursorStream.on('data', async (data) => {
                 try {
-                    debug('Queue tail', data);
+                    //debug('Queue tail', data);
+                    debug('pause', data._id)
+                    cursorStream.pause()
                     const { payload } = data;
                     await this.updateOne('sysqueue', data._id, { $set: { processed: true } })
                     if (this.#queueCallback[data.topic] && this.#queueCallback[data.topic][0]) {
+                        
                         this.#queueCallback[data.topic][0]({ body: { payload } }, {
                             end: () => {
-                                debug('Q end')
+                                debug('resume', data._id)
+                                cursorStream.resume()
                             }
                         })
                     } else {
+                        cursorStream.resume()
                         console.log('Missing queue topic for:', data.topic)
                     }
                 } catch (error) {
+                    cursorStream.resume()
                     console.error("Queue tail error:", error)
                 }
             });
