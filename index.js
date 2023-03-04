@@ -168,7 +168,7 @@ export default class mongoStore {
                 const query = options.filter || {};
                 const hints = options.hints || {};
                 const cursor = collection.find(query, hints);
-                debug("cursor start")
+                debug("query", query, hints)
                 await cursor.forEach((data) => {
                     ee.emit('data', data);
                 });

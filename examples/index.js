@@ -1,5 +1,5 @@
 import {app, datastore} from 'codehooks-js'
-import crudlify from 'codehooks-crudlify-yup';
+import crudlify from 'codehooks-crudlify';
 
 app.all('/myroute', (req, res) => {
     res.end('All of me')

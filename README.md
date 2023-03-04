@@ -14,7 +14,7 @@ Consider the standard Codehooks serverless CRUD app in the `index.js` file below
 *  A minimal codehooks.io backend app
 */
 import { app } from 'codehooks-js';
-import crudlify from 'codehooks-crudlify-yup';
+import crudlify from 'codehooks-crudlify';
 
 app.all('/myroute', (req, res) => {
     res.end('Hit me again with any method!')
@@ -57,7 +57,7 @@ app.listen(3000, () => {
 Create a `package.json` file for your app. 
 
 ```bash
-npm install codehooks-mongodb codehooks-js codehooks-crudlify-yup express body-parser mongodb debug --save
+npm install codehooks-mongodb codehooks-js codehooks-crudlify express body-parser mongodb debug --save
 ```
 This should create something like the following `package.json` file. To enable JavaScript ES6 you need to set `"type":"module"` manually. Also add a scripts.start command to start the express server.
 
@@ -69,7 +69,7 @@ This should create something like the following `package.json` file. To enable J
   },
   "dependencies": {
     "body-parser": "^1.20.1",
-    "codehooks-crudlify-yup": "^1.0.7",
+    "codehooks-crudlify": "^1.0.7",
     "codehooks-js": "^1.0.4",
     "codehooks-mongodb": "^1.0.3",
     "debug": "^4.3.4",
@@ -98,9 +98,9 @@ Running standalone on port 3000
 
 Your app is now listening on `http://localhost:3000/dev/myroute`.
 
-The [Crudlify](https://www.npmjs.com/package/codehooks-crudlify-yup) package generates GET, PUT, POST, PATCH and DELETE on any collection route, e.g. `/dev/mycollection`.
+The [Crudlify](https://www.npmjs.com/package/codehooks-crudlify) package generates GET, PUT, POST, PATCH and DELETE on any collection route, e.g. `/dev/mycollection`.
 
-> Tip: Read the docs for the open source [Crudlify](https://www.npmjs.com/package/codehooks-crudlify-yup) package which creates a full CRUD REST API for your serverless node.js app.
+> Tip: Read the docs for the open source [Crudlify](https://www.npmjs.com/package/codehooks-crudlify) package which creates a full CRUD REST API for your serverless node.js app.
 
 ## Documentation
 * [Example code](./examples)
