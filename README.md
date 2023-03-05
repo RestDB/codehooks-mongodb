@@ -48,7 +48,7 @@ const options = {
 }
 
 // important, make codehooks use express and MongoDB
-coho.app.useExpress(app, options);
+coho.useExpress(app, options);
 
 app.listen(3000, () => {
     console.log("Running standalone on port 3000")
