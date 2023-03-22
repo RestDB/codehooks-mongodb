@@ -19,7 +19,16 @@
     "type": "git",
     "url": "git+https://github.com/RestDB/codehooks-mongodb.git"
   },
-  "keywords": [],
+  "keywords": [
+    "crud",
+    "mongodb",
+    "serverless",
+    "codehooks",
+    "express",
+    "rest",
+    "api",
+    "nosql"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
