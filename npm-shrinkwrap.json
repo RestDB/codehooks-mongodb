@@ -1,12 +1,12 @@
 {
   "name": "codehooks-mongodb",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "codehooks-mongodb",
-      "version": "1.0.9",
+      "version": "1.0.10",
       "license": "ISC",
       "dependencies": {
         "debug": "^4.3.4",
