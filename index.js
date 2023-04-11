@@ -12,13 +12,33 @@ class dataEmitter extends emitter {
     #response = null;
     #arrData = null;
     #arrDataResolver = null;
+    #forEachResolver = null;
+    #forEachCallback = null;
 
     constructor() {
         super();
     }
+    cancel() {
+        this.stream.pause();
+        this.stream.destroy();
+        this.emit('end');
+    }
+    end() {
+        this.stream.pause();
+        this.stream.destroy();
+        this.emit('end');
+    }
+    pause() {
+        this.stream.pause();
+    }
+    resume() {
+        this.stream.resume();
+    }
     pipe = (res) => {
         this.#response = res;
-        res.set('Content-Type', 'application/json');
+        if (res.headers && !res.headers['Content-Type']) {
+            res.set('Content-Type', 'application/json');
+        }        
         res.write('[\n');
         return this;
     }
@@ -32,17 +52,31 @@ class dataEmitter extends emitter {
     toArray = () => {
         this.#arrData = new Array();        
         return new Promise((resolve, reject) => {
-            this.#arrDataResolver = resolve;
+            this.#arrDataResolver = resolve;            
         })
     }
+
+    forEach = (callback) => {
+        return new Promise((resolve, reject) => {
+            this.#forEachResolver = resolve;
+            this.#forEachCallback = callback;
+        })
+    }
+
     emit = (event, data) => {
         if (this.#arrData !== null) {
-            debug("emit", event, data)
             if (event === 'data') {
                 this.#arrData.push(data);
             }
             if (event === 'end') {
                 this.#arrDataResolver(this.#arrData);
+            }
+        } else if(this.#forEachResolver !== null) {
+            if (event === 'data') {
+                this.#forEachCallback(data);
+            }
+            if (event === 'end') {
+                this.#forEachResolver();
             }
         }
         super.emit(event, data)
@@ -90,10 +124,11 @@ export default class mongoStore {
         return new Promise(resolve => resolve(this))
     }
 
-    getCollection = (collname) => {
+    collection = (collname) => {
         const wrap = {
             getOne: (...params) => this.getOne(collname, ...params),
             getMany: (...params) => this.getMany(collname, ...params),
+            find: (...params) => this.getMany(collname, ...params),
             insertOne: (...params) => this.insertOne(collname, ...params),
             updateOne: (...params) => this.updateOne(collname, ...params),
             updateMany: (...params) => this.updateMany(collname, ...params),
